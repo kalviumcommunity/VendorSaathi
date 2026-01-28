@@ -16,3 +16,20 @@ src/
 
 ## Screenshot evidence 
 screenshots/server.png
+
+
+## 🧹 Code Quality & Tooling
+
+### TypeScript (Strict Mode)
+Strict TypeScript settings are enabled to catch errors early, prevent unsafe types, and enforce clean code as the project scales.
+
+### ESLint + Prettier
+- ESLint enforces code quality rules
+- Prettier ensures consistent formatting
+- Prevents style conflicts in team development
+
+### Pre-Commit Hooks (Husky + lint-staged)
+Before every commit:
+- ESLint auto-fixes issues
+- Prettier formats code
+This ensures only clean, reviewed code enters the repository.
