@@ -64,3 +64,57 @@ This project uses environment variables to securely manage configuration values.
 1. Copy `.env.example` → `.env.local`
 2. Replace placeholder values with real credentials
 3. Restart the dev server
+
+
+
+
+## 🌿 Git Branching Strategy
+
+To maintain clarity and consistency, the team follows a standard branch naming convention:
+
+### Branch Types
+- `feature/<feature-name>` → New features  
+- `fix/<bug-name>` → Bug fixes  
+- `chore/<task-name>` → Maintenance or setup tasks  
+- `docs/<update-name>` → Documentation updates  
+
+### Examples
+- feature/login-auth  
+- fix/navbar-alignment  
+- chore/github-workflow-setup  
+- docs/update-readme  
+
+### Rules
+- No one commits directly to `main`
+- Every branch must be merged via a Pull Request
+- One branch = one task = one PR
+
+## ✅ Code Review Checklist
+
+Every Pull Request is reviewed using the following checklist:
+
+- Code follows agreed naming conventions and structure
+- Changes are tested locally
+- No console errors or warnings
+- ESLint and Prettier checks pass
+- Code is readable and well-documented
+- No secrets or environment variables are exposed
+- PR is small, focused, and easy to review
+
+
+## Screenshot evidence 
+screenshots/github1.jpeg
+screenshots/github2.jpeg
+screenshots/github3.jpeg
+
+
+## 🔍 Workflow Reflection
+
+This GitHub workflow ensures high code quality and smooth collaboration by enforcing:
+- Clear ownership through branches
+- Mandatory code reviews
+- Consistent PR documentation
+- Protection of the main branch
+
+It mirrors real-world engineering practices and helps the team scale development safely and efficiently.
+
