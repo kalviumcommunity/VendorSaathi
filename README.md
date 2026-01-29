@@ -118,3 +118,28 @@ This GitHub workflow ensures high code quality and smooth collaboration by enfor
 
 It mirrors real-world engineering practices and helps the team scale development safely and efficiently.
 
+
+
+## 🐳 Docker & Containerization
+
+This project uses Docker and Docker Compose to run the full stack locally.
+
+### Dockerfile
+The Dockerfile defines how the Next.js application is built and run inside a container:
+- Uses Node.js Alpine image
+- Installs dependencies
+- Builds the app
+- Runs on port 3000
+
+### Docker Compose Services
+- **app**: Next.js frontend
+- **db**: PostgreSQL database with persistent volume
+- **redis**: Redis cache for fast data access
+
+### Networking & Volumes
+- All services run on a shared bridge network
+- PostgreSQL uses a named volume to persist data
+
+### How to Run
+```bash
+docker compose up --build
