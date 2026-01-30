@@ -221,3 +221,44 @@ This project uses **Prisma ORM** to manage database schema migrations and reprod
   ```bash
   npx prisma migrate dev --name <migration_name>
 
+
+
+## Database Transactions & Query Optimization
+
+### Transactions
+Transactions are used where multiple dependent operations must succeed together.
+Example: License approval
+- Create license
+- Update request status
+- Insert audit log
+
+If any step fails, Prisma automatically rolls back all changes, ensuring data integrity.
+
+### Rollback Handling
+All transactions are wrapped in try‑catch blocks.
+Rollback behavior was verified by intentionally triggering errors and confirming no partial writes occurred.
+
+### Query Optimization
+Optimizations applied:
+- Field selection instead of over‑fetching
+- Pagination using skip & take
+- Batch inserts using createMany
+- Avoided N+1 query patterns
+
+### Indexes Added
+Indexes were added on frequently queried fields:
+- vendor_id
+- status
+- expiry_date
+
+These significantly improve read performance for admin dashboards.
+
+### Performance Comparison
+- Query logs captured before and after indexing
+- Indexed queries showed reduced execution time
+
+### Reflection
+In production, query performance would be monitored using:
+- Prisma query logs
+- Database slow‑query logs
+- Metrics like latency, error rate, and throughput
