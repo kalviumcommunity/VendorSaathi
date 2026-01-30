@@ -143,3 +143,59 @@ The Dockerfile defines how the Next.js application is built and run inside a con
 ### How to Run
 ```bash
 docker compose up --build
+
+
+ Database Design Summary
+VendorSaathi uses a normalized relational database to manage vendors, licenses, inspections, and support workflows in a scalable and secure way.
+
+Core Entities
+Users – authentication & roles
+
+Vendors – vendor profile details
+
+Licenses – issued licenses & validity
+
+License Requests – issue/update/renew tracking
+
+Inspections – compliance records
+
+Support Tickets – vendor support
+
+Relationships
+One User → One Vendor
+
+One Vendor → One License
+
+One Vendor → Many License Requests
+
+One Vendor → Many Inspections & Tickets
+
+🔑 Keys & Constraints
+Primary keys on all tables
+
+Foreign keys maintain referential integrity
+
+email and license_uid are unique
+
+ENUMs enforce valid roles and statuses
+
+📐 Normalization
+The schema follows 3NF:
+
+Atomic fields (1NF)
+
+Separated concerns (2NF)
+
+No transitive dependencies (3NF)
+
+This eliminates redundancy and update anomalies.
+
+🚀 Scalability & Performance
+Modular table design
+
+Indexed foreign keys for fast queries
+
+Supports common queries like license status, pending requests, and inspection history
+
+🧠 Reflection
+This design mirrors real‑world regulatory systems while remaining easy to extend for future features like payments, QR verification, and analytics.
