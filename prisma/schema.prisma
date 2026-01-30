@@ -1,0 +1,163 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  VENDOR
+}
+
+enum RequestType {
+  ISSUE
+  UPDATE
+  RENEW
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LicenseStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum InspectionStatus {
+  PASSED
+  FAILED
+  PENDING
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum NotificationType {
+  LICENSE
+  TICKET
+  SYSTEM
+}
+
+model User {
+  user_id     Int       @id @default(autoincrement())
+  email       String    @unique
+  password_hash String
+  role        Role
+  is_active   Boolean   @default(true)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  vendor          Vendor?
+  reviewedRequests LicenseRequest[] @relation("ReviewedBy")
+  inspections     Inspection[]      @relation("InspectedBy")
+  tickets         SupportTicket[]    @relation("AssignedAdmin")
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+}
+
+model Vendor {
+  vendor_id      Int      @id @default(autoincrement())
+  user_id        Int      @unique
+  full_name      String
+  dob            DateTime
+  phone_number   String
+  aadhaar_number String
+  pan_number     String
+  address        String
+  photo_url      String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  user            User @relation(fields: [user_id], references: [user_id])
+  licenses        License[]
+  licenseRequests LicenseRequest[]
+  inspections     Inspection[]
+  tickets         SupportTicket[]
+}
+
+model LicenseRequest {
+  request_id   Int           @id @default(autoincrement())
+  vendor_id    Int
+  request_type RequestType
+  request_data Json
+  status       RequestStatus @default(PENDING)
+  reviewed_by  Int?
+  reviewed_at  DateTime?
+  created_at   DateTime      @default(now())
+
+  vendor  Vendor @relation(fields: [vendor_id], references: [vendor_id])
+  reviewer User?  @relation("ReviewedBy", fields: [reviewed_by], references: [user_id])
+}
+
+model License {
+  license_id  Int           @id @default(autoincrement())
+  license_uid String        @unique
+  vendor_id   Int
+  issue_date  DateTime
+  expiry_date DateTime
+  status      LicenseStatus
+  created_by  Int
+  created_at  DateTime      @default(now())
+
+  vendor Vendor @relation(fields: [vendor_id], references: [vendor_id])
+}
+
+model Inspection {
+  inspection_id   Int              @id @default(autoincrement())
+  vendor_id       Int
+  license_id      Int
+  inspection_date DateTime
+  status          InspectionStatus
+  remarks         String?
+  inspected_by    Int
+  created_at      DateTime @default(now())
+
+  vendor    Vendor @relation(fields: [vendor_id], references: [vendor_id])
+  inspector User   @relation("InspectedBy", fields: [inspected_by], references: [user_id])
+}
+
+model SupportTicket {
+  ticket_id      Int          @id @default(autoincrement())
+  vendor_id      Int
+  subject        String
+  description    String
+  status         TicketStatus @default(OPEN)
+  assigned_admin Int?
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+
+  vendor Vendor @relation(fields: [vendor_id], references: [vendor_id])
+  admin  User?  @relation("AssignedAdmin", fields: [assigned_admin], references: [user_id])
+}
+
+model Notification {
+  notification_id Int              @id @default(autoincrement())
+  user_id         Int
+  message         String
+  type            NotificationType
+  is_read         Boolean          @default(false)
+  created_at      DateTime         @default(now())
+
+  user User @relation(fields: [user_id], references: [user_id])
+}
+
+model AuditLog {
+  log_id     Int      @id @default(autoincrement())
+  admin_id   Int
+  action     String
+  entity_type String
+  entity_id  Int
+  created_at DateTime @default(now())
+
+  admin User @relation(fields: [admin_id], references: [user_id])
+}
