@@ -1,4 +1,10 @@
 import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+
+export async function testDB() {
+  const users = await prisma.user.findMany();
+  console.log(users);
+}
 
 export default function Home() {
   return (
