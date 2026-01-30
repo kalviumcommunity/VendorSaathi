@@ -209,3 +209,15 @@ Prisma is used as the ORM to provide type‑safe database access and reliable mi
 - Centralized Prisma client to avoid multiple DB connections
 
 Prisma improves safety, maintainability, and developer productivity.
+
+
+
+## 🗄️ Database Migrations & Seeding (Prisma)
+
+This project uses **Prisma ORM** to manage database schema migrations and reproducible seed data.
+
+### Migrations Workflow
+- Create & apply migrations:
+  ```bash
+  npx prisma migrate dev --name <migration_name>
+
