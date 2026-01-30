@@ -199,3 +199,13 @@ Supports common queries like license status, pending requests, and inspection hi
 
 🧠 Reflection
 This design mirrors real‑world regulatory systems while remaining easy to extend for future features like payments, QR verification, and analytics.
+
+
+### Prisma ORM Setup
+Prisma is used as the ORM to provide type‑safe database access and reliable migrations.
+
+- PostgreSQL as primary database
+- Strongly typed models for Users, Vendors, Licenses, Requests
+- Centralized Prisma client to avoid multiple DB connections
+
+Prisma improves safety, maintainability, and developer productivity.
