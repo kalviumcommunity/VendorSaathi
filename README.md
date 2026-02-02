@@ -298,3 +298,34 @@ In production, query performance would be monitored using:
 - slow query tracking
 - latency & error metrics
 
+
+
+
+## RESTful API Design
+
+### API Route Hierarchy
+- /api/users
+- /api/users/[id]
+- /api/vendors
+- /api/vendors/[id]
+- /api/licenses
+- /api/licenses/[id]
+
+### HTTP Methods
+- GET → fetch data
+- POST → create resource
+- PUT → update resource
+- DELETE → remove resource
+
+### Pagination
+Vendor listing supports pagination using:
+?page=1&limit=10
+
+### Error Handling
+- 400 → invalid input
+- 404 → resource not found
+- 201 → successful creation
+
+### Sample Request
+```bash
+curl http://localhost:3000/api/users
