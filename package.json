@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
@@ -29,6 +30,7 @@
     "prettier": "^3.8.1",
     "prisma": "^6.19.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   },
   "lint-staged": {
@@ -36,5 +38,9 @@
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "prisma": {
+  "seed": "npx tsx prisma/seed.ts"
+}
+
 }
