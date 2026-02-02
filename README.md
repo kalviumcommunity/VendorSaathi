@@ -262,3 +262,39 @@ In production, query performance would be monitored using:
 - Prisma query logs
 - Database slow‑query logs
 - Metrics like latency, error rate, and throughput
+
+
+
+
+## Transactions & Query Optimization
+
+### Transactions
+We implemented Prisma transactions to ensure atomic license approval workflows.
+If any step fails (license creation, request update, audit log), the entire operation rolls back automatically.
+
+### Rollback Testing
+Rollback behavior was verified by forcing errors and confirming no partial writes occurred in the database.
+
+### Query Optimization
+- Selected only required fields to prevent over-fetching
+- Used pagination with skip/take
+- Batched inserts using createMany
+- Avoided N+1 queries
+
+### Indexes Added
+Indexes were added on:
+- vendor_id
+- status
+- expiry_date
+
+These optimize admin dashboard and reporting queries.
+
+### Performance Comparison
+Query logs show reduced execution time after indexing.
+
+### Reflection
+In production, query performance would be monitored using:
+- Prisma query logs
+- slow query tracking
+- latency & error metrics
+
