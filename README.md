@@ -329,3 +329,17 @@ Vendor listing supports pagination using:
 ### Sample Request
 ```bash
 curl http://localhost:3000/api/users
+
+
+## Global API Response Handler
+
+All API endpoints use a unified response envelope for consistency.
+
+### Success Format
+```json
+{
+  "success": true,
+  "message": "Users fetched successfully",
+  "data": [],
+  "timestamp": "2026-02-06T10:00:00Z"
+}
