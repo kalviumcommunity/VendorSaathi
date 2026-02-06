@@ -380,3 +380,34 @@ We implemented secure authentication using password hashing and token-based sess
   "success": true,
   "message": "Signup successful"
 }
+
+
+
+## Authorization Middleware (RBAC)
+
+We implemented centralized authorization using Next.js middleware.
+
+### How It Works
+1. Middleware intercepts incoming requests
+2. JWT token is verified
+3. User role is checked
+4. Access is allowed or denied
+
+### Protected Routes
+- /api/users → any authenticated user
+- /api/admin → admin-only
+
+### Role-Based Logic
+- admin → full access
+- user → restricted access
+
+### Example Outcomes
+- Missing token → 401 Unauthorized
+- Invalid token → 403 Forbidden
+- User accessing admin route → Access denied
+
+### Least Privilege Principle
+Users can only access routes necessary for their role.
+
+### Extensibility
+New roles like `moderator` or `editor` can be added with minimal changes to middleware.
