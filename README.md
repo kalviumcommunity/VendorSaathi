@@ -357,3 +357,26 @@ const userSchema = z.object({
   email: z.string().email(),
   age: z.number().min(18),
 });
+
+
+## Authentication System (bcrypt + JWT)
+
+We implemented secure authentication using password hashing and token-based sessions.
+
+### Signup Flow
+1. User sends email + password
+2. Password hashed with bcrypt
+3. Stored securely in database
+
+### Login Flow
+1. Password verified with bcrypt
+2. JWT token generated
+3. Token expires in 1 hour
+
+### Sample Signup Response
+
+```json
+{
+  "success": true,
+  "message": "Signup successful"
+}
