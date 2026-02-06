@@ -343,3 +343,17 @@ All API endpoints use a unified response envelope for consistency.
   "data": [],
   "timestamp": "2026-02-06T10:00:00Z"
 }
+
+
+## Zod Request Validation
+
+We use Zod to validate incoming API requests before processing them.
+
+### User Schema
+
+```ts
+const userSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  age: z.number().min(18),
+});
