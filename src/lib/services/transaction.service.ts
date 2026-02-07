@@ -7,7 +7,7 @@ export async function approveLicense(requestId: number, adminId: number) {
         where: { request_id: requestId },
       });
 
-     throw new Error("Force rollback test");
+      throw new Error("Force rollback test");
 
       const license = await tx.license.create({
         data: {

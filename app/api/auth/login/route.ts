@@ -27,11 +27,9 @@ export async function POST(req: Request) {
         { status: 401 }
       );
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     return NextResponse.json({
       success: true,
