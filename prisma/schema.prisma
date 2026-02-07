@@ -49,13 +49,14 @@ enum NotificationType {
 }
 
 model User {
-  user_id     Int       @id @default(autoincrement())
-  email       String    @unique
+  user_id       Int       @id @default(autoincrement())
+  email        String    @unique
   password_hash String
-  role        Role
-  is_active   Boolean   @default(true)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  full_name    String?   // from Create Account form; used for Admin display and Vendor initial profile
+  role         Role
+  is_active    Boolean   @default(true)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
 
   vendor          Vendor?
   reviewedRequests LicenseRequest[] @relation("ReviewedBy")
@@ -109,7 +110,8 @@ model License {
   created_by  Int
   created_at  DateTime      @default(now())
 
-  vendor Vendor @relation(fields: [vendor_id], references: [vendor_id])
+  vendor      Vendor        @relation(fields: [vendor_id], references: [vendor_id])
+  inspections Inspection[]
 }
 
 model Inspection {
@@ -122,8 +124,9 @@ model Inspection {
   inspected_by    Int
   created_at      DateTime @default(now())
 
-  vendor    Vendor @relation(fields: [vendor_id], references: [vendor_id])
-  inspector User   @relation("InspectedBy", fields: [inspected_by], references: [user_id])
+  vendor    Vendor  @relation(fields: [vendor_id], references: [vendor_id])
+  license   License @relation(fields: [license_id], references: [license_id])
+  inspector User    @relation("InspectedBy", fields: [inspected_by], references: [user_id])
 }
 
 model SupportTicket {
@@ -160,25 +163,5 @@ model AuditLog {
   created_at DateTime @default(now())
 
   admin User @relation(fields: [admin_id], references: [user_id])
-}
-
-model LicenseRequest {
-  request_id Int @id @default(autoincrement())
-  vendor_id  Int
-  status     RequestStatus
-  created_at DateTime @default(now())
-
-  @@index([vendor_id])
-  @@index([status])
-}
-
-model License {
-  license_id  Int @id @default(autoincrement())
-  vendor_id   Int
-  expiry_date DateTime
-  status      LicenseStatus
-
-  @@index([vendor_id])
-  @@index([expiry_date])
 }
 
