@@ -209,3 +209,205 @@ Prisma is used as the ORM to provide type‑safe database access and reliable mi
 - Centralized Prisma client to avoid multiple DB connections
 
 Prisma improves safety, maintainability, and developer productivity.
+
+
+
+## 🗄️ Database Migrations & Seeding (Prisma)
+
+This project uses **Prisma ORM** to manage database schema migrations and reproducible seed data.
+
+### Migrations Workflow
+- Create & apply migrations:
+  ```bash
+  npx prisma migrate dev --name <migration_name>
+
+
+
+## Database Transactions & Query Optimization
+
+### Transactions
+Transactions are used where multiple dependent operations must succeed together.
+Example: License approval
+- Create license
+- Update request status
+- Insert audit log
+
+If any step fails, Prisma automatically rolls back all changes, ensuring data integrity.
+
+### Rollback Handling
+All transactions are wrapped in try‑catch blocks.
+Rollback behavior was verified by intentionally triggering errors and confirming no partial writes occurred.
+
+### Query Optimization
+Optimizations applied:
+- Field selection instead of over‑fetching
+- Pagination using skip & take
+- Batch inserts using createMany
+- Avoided N+1 query patterns
+
+### Indexes Added
+Indexes were added on frequently queried fields:
+- vendor_id
+- status
+- expiry_date
+
+These significantly improve read performance for admin dashboards.
+
+### Performance Comparison
+- Query logs captured before and after indexing
+- Indexed queries showed reduced execution time
+
+### Reflection
+In production, query performance would be monitored using:
+- Prisma query logs
+- Database slow‑query logs
+- Metrics like latency, error rate, and throughput
+
+
+
+
+## Transactions & Query Optimization
+
+### Transactions
+We implemented Prisma transactions to ensure atomic license approval workflows.
+If any step fails (license creation, request update, audit log), the entire operation rolls back automatically.
+
+### Rollback Testing
+Rollback behavior was verified by forcing errors and confirming no partial writes occurred in the database.
+
+### Query Optimization
+- Selected only required fields to prevent over-fetching
+- Used pagination with skip/take
+- Batched inserts using createMany
+- Avoided N+1 queries
+
+### Indexes Added
+Indexes were added on:
+- vendor_id
+- status
+- expiry_date
+
+These optimize admin dashboard and reporting queries.
+
+### Performance Comparison
+Query logs show reduced execution time after indexing.
+
+### Reflection
+In production, query performance would be monitored using:
+- Prisma query logs
+- slow query tracking
+- latency & error metrics
+
+
+
+
+## RESTful API Design
+
+### API Route Hierarchy
+- /api/users
+- /api/users/[id]
+- /api/vendors
+- /api/vendors/[id]
+- /api/licenses
+- /api/licenses/[id]
+
+### HTTP Methods
+- GET → fetch data
+- POST → create resource
+- PUT → update resource
+- DELETE → remove resource
+
+### Pagination
+Vendor listing supports pagination using:
+?page=1&limit=10
+
+### Error Handling
+- 400 → invalid input
+- 404 → resource not found
+- 201 → successful creation
+
+### Sample Request
+```bash
+curl http://localhost:3000/api/users
+
+
+## Global API Response Handler
+
+All API endpoints use a unified response envelope for consistency.
+
+### Success Format
+```json
+{
+  "success": true,
+  "message": "Users fetched successfully",
+  "data": [],
+  "timestamp": "2026-02-06T10:00:00Z"
+}
+
+
+## Zod Request Validation
+
+We use Zod to validate incoming API requests before processing them.
+
+### User Schema
+
+```ts
+const userSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  age: z.number().min(18),
+});
+
+
+## Authentication System (bcrypt + JWT)
+
+We implemented secure authentication using password hashing and token-based sessions.
+
+### Signup Flow
+1. User sends email + password
+2. Password hashed with bcrypt
+3. Stored securely in database
+
+### Login Flow
+1. Password verified with bcrypt
+2. JWT token generated
+3. Token expires in 1 hour
+
+### Sample Signup Response
+
+```json
+{
+  "success": true,
+  "message": "Signup successful"
+}
+
+
+
+## Authorization Middleware (RBAC)
+
+We implemented centralized authorization using Next.js middleware.
+
+### How It Works
+1. Middleware intercepts incoming requests
+2. JWT token is verified
+3. User role is checked
+4. Access is allowed or denied
+
+### Protected Routes
+- /api/users → any authenticated user
+- /api/admin → admin-only
+
+### Role-Based Logic
+- admin → full access
+- user → restricted access
+
+### Example Outcomes
+- Missing token → 401 Unauthorized
+- Invalid token → 403 Forbidden
+- User accessing admin route → Access denied
+
+### Least Privilege Principle
+Users can only access routes necessary for their role.
+
+### Extensibility
+New roles like `moderator` or `editor` can be added with minimal changes to middleware.

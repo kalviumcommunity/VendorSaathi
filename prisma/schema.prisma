@@ -161,3 +161,24 @@ model AuditLog {
 
   admin User @relation(fields: [admin_id], references: [user_id])
 }
+
+model LicenseRequest {
+  request_id Int @id @default(autoincrement())
+  vendor_id  Int
+  status     RequestStatus
+  created_at DateTime @default(now())
+
+  @@index([vendor_id])
+  @@index([status])
+}
+
+model License {
+  license_id  Int @id @default(autoincrement())
+  vendor_id   Int
+  expiry_date DateTime
+  status      LicenseStatus
+
+  @@index([vendor_id])
+  @@index([expiry_date])
+}
+
