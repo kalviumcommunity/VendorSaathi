@@ -689,3 +689,8 @@ Lifecycle policies can be used to auto-delete old files to reduce cost.
 This project integrates a **transactional email service** (AWS SES / SendGrid) into a **Next.js API route** to send automated emails such as welcome messages, password reset links, and security alerts. The backend exposes an endpoint (`/api/email`) that accepts `to`, `subject`, and `message` (HTML) and sends emails securely using verified sender credentials stored in environment variables. A reusable HTML template system is used to generate dynamic personalized emails. The setup also considers real-world email concerns such as **sandbox vs production mode**, **rate limits**, and **bounce/spam handling** using provider dashboards (SES/SendGrid). Logs are maintained to confirm successful delivery using message IDs and response headers.
 
 ---
+
+
+## 🛣️ Page Routing & Dynamic Routes (Next.js App Router)
+
+This project implements **Next.js App Router routing** using a clean file-based structure with **public routes** (`/`, `/login`), **protected routes** (`/dashboard`, `/users`) and **dynamic routes** (`/users/[id]`). Authentication is enforced using a `middleware.ts` that validates a JWT token stored in cookies and redirects unauthorized users to `/login`. Dynamic routing is used to render user-specific pages based on URL parameters (ex: `/users/1`, `/users/2`). A global `layout.tsx` provides shared navigation across pages, and a custom `not-found.tsx` is included for graceful 404 handling. This setup improves scalability, supports SEO-friendly routes, and ensures a smooth user experience with structured navigation.
