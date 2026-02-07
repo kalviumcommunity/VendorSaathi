@@ -680,3 +680,12 @@ Lifecycle policies can be used to auto-delete old files to reduce cost.
 ---
 
 
+
+
+---
+
+## 📧 Email Service Integration (Transactional Emails)
+
+This project integrates a **transactional email service** (AWS SES / SendGrid) into a **Next.js API route** to send automated emails such as welcome messages, password reset links, and security alerts. The backend exposes an endpoint (`/api/email`) that accepts `to`, `subject`, and `message` (HTML) and sends emails securely using verified sender credentials stored in environment variables. A reusable HTML template system is used to generate dynamic personalized emails. The setup also considers real-world email concerns such as **sandbox vs production mode**, **rate limits**, and **bounce/spam handling** using provider dashboards (SES/SendGrid). Logs are maintained to confirm successful delivery using message IDs and response headers.
+
+---
