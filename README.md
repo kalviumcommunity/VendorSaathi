@@ -572,3 +572,111 @@ Caching may be counterproductive if:
 ---
 
 
+
+
+---
+
+# 📤 File Upload API using AWS S3 Pre-Signed URLs (Next.js)
+
+## 📌 Overview
+
+This project implements a **secure and scalable file upload system** in **Next.js** using **AWS S3 Pre-Signed URLs**.
+Instead of uploading files through the backend, the backend generates a **temporary signed URL** and the client uploads directly to S3.
+
+---
+
+## ⚙️ Tech Stack
+
+* Next.js (App Router)
+* AWS S3
+* Prisma (DB Storage)
+* @aws-sdk/client-s3
+* @aws-sdk/s3-request-presigner
+
+---
+
+## 🔐 Environment Variables
+
+Add this in `.env`:
+
+```env
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=ap-south-1
+AWS_BUCKET_NAME=your-bucket-name
+```
+
+---
+
+## 📌 Upload Flow (Pre-Signed URL)
+
+1. Client sends filename + fileType to backend
+2. Backend generates a **pre-signed URL** (valid for 60 sec)
+3. Client uploads file directly to S3 using PUT request
+4. File URL is stored in database
+
+---
+
+## 🚀 API Endpoints
+
+### ✅ Generate Upload URL
+
+`POST /api/upload`
+
+Response:
+
+```json
+{
+  "success": true,
+  "uploadURL": "signed-url-here"
+}
+```
+
+### ✅ Store File Metadata
+
+`POST /api/files`
+
+Body Example:
+
+```json
+{
+  "fileName": "sample.png",
+  "fileURL": "https://bucket.s3.region.amazonaws.com/sample.png"
+}
+```
+
+---
+
+## ⏳ Expiry (TTL Policy)
+
+* Pre-signed URL expires in **60 seconds**
+* Prevents misuse and unauthorized uploads
+
+---
+
+## 🛡️ Security Measures
+
+* File type validation (`image/*`, `application/pdf`)
+* Short-lived signed URL (60 sec)
+* No AWS credentials exposed to client
+* Backend only handles URL generation
+
+---
+
+## ⚠️ Reflection
+
+Pre-signed URLs improve **performance + scalability**, but careful validation is required to avoid storing unsafe or unwanted uploads.
+Lifecycle policies can be used to auto-delete old files to reduce cost.
+
+---
+
+## ✅ Deliverables Completed
+
+* Working API to generate S3 pre-signed upload URL
+* File uploaded directly to S3 via client
+* File URL stored in database with Prisma
+* Validation + expiry implemented
+
+---
+
+
